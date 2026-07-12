@@ -1,0 +1,24 @@
+{% extends '../base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<div class="w-full flex-row flex gap-4 my-1 bg-white border border-gray-200 rounded-lg shadow sm:p-3 md:p-4">
+    <ul class="flex-row  w-fit flex gap-x-4 mb-0 justify-center items-center ">
+        <li>{{ object.name.capitalize }} : {{ object.get_fiqh_display }}</li>
+        <a 
+            href="{% url 'testapp:ifta_update' object.name %}" 
+            class="cursor-pointer rounded bg-blue-400 text-white no-underline p-2 " > 
+            Update Ifta 
+        </a>
+        <form method="post" action="{% url 'testapp:ifta_delete' object.name %}">
+            {% csrf_token %}
+            <button type="submit" class="cursor-pointer rounded bg-red-400 text-white no-underline p-2 " > 
+                Delete Ifta 
+            </button>
+        </form>
+    </ul>
+</div>
+
+
+{% endblock %}

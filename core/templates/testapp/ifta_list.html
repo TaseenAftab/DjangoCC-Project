@@ -1,0 +1,37 @@
+{% extends '../base.html' %}
+{% load widget_tweaks %}
+
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+    {% for ifta in object_list %}
+        <li>
+            <a href="{% url 'testapp:ifta_detail' ifta.name %}">
+                {{ ifta.name.capitalize }}
+            </a>
+            : {{ ifta.get_fiqh_display }}
+        </li>
+    {% endfor %}
+
+    <br>
+    <h2> add new ifta</h2>
+    <form 
+        action="{% url 'testapp:ifta_create' %}" 
+        class="flex-row flex flex-1 gap-x-4 justify-left"
+        method="post"
+    >
+        {% csrf_token %}
+        <div class="mb-3">
+            {{  form.name.label_tag }}
+            {% render_field form.name class+="text-lg bg-slate-200 border-0" %}
+            {{ form.name.errors }}
+        </div>
+        <div class="mb-3">
+            {{ form.fiqh.label_tag }}
+            {% render_field form.fiqh class+="text-lg bg-slate-200 border-0" %}
+            {{ form.fiqh.errors }}
+        </div>
+        <button type="submit" class=" rounded-full bg-slate-300 mb-3 h-fit cursor-pointer px-4 py-2 self-center border-black border-2">Create</button>
+    </form>
+{% endblock %}

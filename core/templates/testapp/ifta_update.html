@@ -1,0 +1,31 @@
+{% extends '../base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2> Update Ifta</h2>
+    <div class="w-[90%] flex flex-row justify-center">
+        <form 
+            hx-post="{% url 'testapp:ifta_update' object.name %}"
+            class="flex-row flex flex-1 gap-x-4 justify-center "
+        >
+            {% csrf_token %}
+            <div class="mb-3">
+                {{  form.name.label_tag }}
+                {% render_field form.name class+="text-lg bg-green-800 text-white border-0" %}
+                {{ form.name.errors }}
+            </div>
+            <div class="mb-3">
+                {{ form.fiqh.label_tag }}
+                {% render_field form.fiqh class+="text-lg bg-red-500 border-0" %}
+                {{ form.fiqh.errors }}
+            </div>
+            <button type="submit" class=" rounded-full bg-slate-300 mb-3 h-fit cursor-pointer px-4 py-2 self-center border-black border-2">Update</button>
+        </form>
+    </div>
+
+{% endblock %} 
+
+{% block javascript %}
+{% endblock javascript %}
