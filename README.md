@@ -39,9 +39,44 @@ To run the tests, check your test coverage, and generate an HTML coverage report
 
     uv run pytest
 
-### Live reloading and Sass CSS compilation
+### Tailwind CSS
 
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally.html#using-webpack-or-gulp).
+This project uses Tailwind CSS, configured inside the [`theme/static_src`](file:///d:/Projects/DjangoCC/core/theme/static_src) directory.
+
+#### Installation
+Before compiling CSS for the first time, you must install the Node.js dependencies:
+
+1. Navigate to the Tailwind theme directory:
+   ```bash
+   cd theme/static_src
+   ```
+2. Install the packages:
+   ```bash
+   npm install
+   ```
+
+#### Running Tailwind in Development (Watch Mode)
+To compile and automatically rebuild your CSS when templates change:
+
+* **Using `just`**:
+  ```bash
+  just tailwind
+  ```
+* **Manually**:
+  Navigate to the theme directory and run the dev server:
+  ```bash
+  cd theme/static_src
+  npm run dev
+  ```
+
+#### Building for Production (Minified)
+To compile a production-ready, minified stylesheet:
+
+Navigate to the theme directory and run the build script:
+```bash
+cd theme/static_src
+npm run build
+```
 
 ### Celery
 
@@ -70,14 +105,105 @@ cd core
 uv run celery -A config.celery_app worker -B -l info
 ```
 
-### Email Server
+## Docker Setup & Local Development
 
-In development, it is often nice to be able to see emails that are being sent from your application. For that reason local SMTP server [Mailpit](https://github.com/axllent/mailpit) with a web interface is available as docker container.
+This project supports local development using Docker and Docker Compose. Environment configurations are already defined in the [`.envs/.local/`](file:///d:/Projects/DjangoCC/core/.envs/.local) directory.
 
-Container mailpit will start automatically when you will run all docker containers.
-Please check [cookiecutter-django Docker documentation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally-docker.html) for more details how to start all containers.
+### Quick Start with `just`
 
-With Mailpit running, to view messages that are sent by your application, open your browser and go to `http://127.0.0.1:8025`
+A [`justfile`](file:///d:/Projects/DjangoCC/core/justfile) is provided for convenience. If you have [just](https://github.com/casey/just) installed:
+
+1. **Build the containers**:
+   ```bash
+   just build
+   ```
+2. **Start the containers** (runs in background):
+   ```bash
+   just up
+   ```
+3. **Create a superuser**:
+   ```bash
+   just manage createsuperuser
+   ```
+4. **Start Tailwind compiler / watcher**:
+   ```bash
+   just tailwind
+   ```
+5. **Run tests**:
+   ```bash
+   just pytest
+   ```
+6. **Stop containers**:
+   ```bash
+   just down
+   ```
+7. **Prune/Reset environment** (destroys containers and database volumes):
+   ```bash
+   just prune
+   ```
+
+### Alternative: Using Docker Compose directly
+
+If you don't have `just` installed, you can run raw `docker compose` commands directly:
+
+1. **Build the images**:
+   ```bash
+   docker compose -f docker-compose.local.yml build
+   ```
+2. **Start the application**:
+   ```bash
+   docker compose -f docker-compose.local.yml up
+   ```
+   To run in the background (detached mode):
+   ```bash
+   docker compose -f docker-compose.local.yml up -d
+   ```
+3. **Create a superuser**:
+   ```bash
+   docker compose -f docker-compose.local.yml run --rm django python manage.py createsuperuser
+   ```
+4. **Start Tailwind compiler / watcher**:
+   ```bash
+   cd theme/static_src
+   npm run dev
+   ```
+5. **Run tests**:
+   ```bash
+   docker compose -f docker-compose.local.yml run --rm django pytest
+   ```
+6. **Stop containers**:
+   ```bash
+   docker compose -f docker-compose.local.yml down
+   ```
+
+> [!TIP]
+> **PowerShell/Bash Alias Helper**
+>
+> To simplify typing, you can define a shell helper alias like `dcl`.
+>
+> In **PowerShell**:
+> ```powershell
+> function dcl { docker compose -f docker-compose.local.yml $args }
+> ```
+> In **Bash / Zsh**:
+> ```bash
+> alias dcl="docker compose -f docker-compose.local.yml"
+> ```
+> Once defined, run commands with the shorter prefix `dcl`:
+> ```bash
+> dcl build
+> dcl up -d
+> dcl run --rm django python manage.py tailwind start
+> ```
+
+### Accessing Services
+
+Once the containers are running:
+* **Django Application**: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+* **Mailpit (Local SMTP Webmail)**: [http://127.0.0.1:8025](http://127.0.0.1:8025) (to view outgoing emails)
+* **Flower (Celery Monitoring)**: [http://127.0.0.1:5555](http://127.0.0.1:5555)
+
+---
 
 ## Deployment
 

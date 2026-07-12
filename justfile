@@ -1,4 +1,6 @@
 export COMPOSE_FILE := "docker-compose.local.yml"
+set windows-shell := ["powershell.exe", "-Command"]
+
 
 ## Just does not yet manage signals for subprocesses reliably, which can lead to unexpected behavior.
 ## Exercise caution before expanding its usage in production environments.
@@ -36,6 +38,11 @@ logs *args:
 # manage: Executes `manage.py` command.
 manage +args:
     @docker compose run --rm django python ./manage.py {{args}}
+
+
+# npm-dev: Run npm run dev in theme/static_src
+tailwind:
+    cd theme/static_src; npm run dev
 
 # pytest: Run tests with pytest.
 pytest *args:
