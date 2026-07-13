@@ -66,10 +66,7 @@ class IftaCreateView(LoginRequiredMixin, CreateView):
 ifta_create_view = IftaCreateView.as_view()
 
 
-class IftaUpdateView(
-    LoginRequiredMixin,
-    UpdateView,
-):
+class IftaUpdateView(LoginRequiredMixin, UpdateView):
     model = Ifta
     template_name = "testapp/ifta_update.html"
     form_class = CreateIFtaForm
