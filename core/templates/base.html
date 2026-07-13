@@ -41,6 +41,7 @@
             referrerpolicy="no-referrer"></script>
     <!-- Your stuff: Third-party javascript libraries go here -->
     <!-- place project specific Javascript in this file -->
+    <script defer src = "{% static 'js/htmx.min.js' %}"></script>
     <script defer src="{% static 'js/project.js' %}"></script>
     {% block javascript %}
       <!-- Use javascript block for custom javascript -->
@@ -102,15 +103,20 @@
       </div>
       <div class="container">
         {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-dismissible {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} mt-3">
-              {{ message }}
-              <button type="button"
-                      class="btn-close"
-                      data-bs-dismiss="alert"
-                      aria-label="Close"></button>
-            </div>
-          {% endfor %}
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              // {% for message in messages %}
+              // {% if forloop.counter <= 3 %}
+              window.dispatchEvent(new CustomEvent('htmx-toasts:notify', {
+                detail: {
+                  message: "{{ message|escapejs }}",
+                  level: "{{ message.tags }}" // maps to 'success', 'info', 'warn', 'error'
+                }
+              }));
+              // {% endif %}
+              // {% endfor %}
+            });
+          </script>
         {% endif %}
         {% block main %}
           {% block content %}
