@@ -13,13 +13,8 @@
       </li>
     {% endfor %}
   </ul>
-  <br />
   <h2 class="text-lg font-semibold mt-4">Add new Ifta</h2>
-  <form hx-post="{% url 'testapp:ifta_create' %}"
-        hx-target="#ifta-list"
-        hx-select="#ifta-list"
-        hx-swap="outerHTML"
-        hx-on::after-request="this.reset()"
+  <form action="{% url 'testapp:ifta_create' %}"
         class="flex-row flex flex-1 gap-x-4 justify-left mt-2"
         method="post">
     {% csrf_token %}
