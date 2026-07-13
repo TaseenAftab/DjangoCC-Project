@@ -6,8 +6,8 @@
 {% block title %}{{ title }}{% endblock title %}
 {% block content %}
   <div id="list-container"
-       class="w-[90dvw] bg-slate-100 min-h-[90dvh] flex flex-row gap-2 justify-center align-top">
-    <div class=" w-[40dvw] mt-4 ">
+       class="w-[90dvw] border border-black bg-slate-100 min-h-[90dvh] flex flex-row  justify-center align-top">
+    <div class=" w-[40dvw]  pt-4 pr-[2dvw] ">
       <h5 class="ml-[2%] mb-3">All Iftas</h5>
       <div id="ifta-list" class="flex flex-col gap-2">
         {% for ifta in object_list %}

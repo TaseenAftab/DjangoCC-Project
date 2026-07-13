@@ -1,0 +1,26 @@
+{% load partials %}
+{% load widget_tweaks %}
+
+{% partialdef delete_modal %}
+  <dialog id="ifta-delete-modal"
+          class="p-6 rounded-lg shadow-xl border border-slate-200 backdrop:bg-black/50 w-[30dvw] h-[30dvh]">
+    <div class="w-full bg-white flex flex-col align-middle items-stretch justify-evenly h-full gap-y-4">
+      <div class="w-full flex-col flex justify-center">
+        <span class="font-semibold text-slate-800 text-lg">Do you want to delete {{ object.name }}?</span>
+        <span>This action cannot be undone.</span>
+      </div>
+      <div class="flex justify-between align-bottom items-end w-full h-full flex-row mt-2 gap-x-4">
+        <span hx-post="{% url 'testapp:ifta_delete' object.name %}"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              class="cursor-pointer h-[7dvh] min-w-[10dvw] text-center rounded bg-red-400 text-white p-2 border-0">Delete Ifta</span>
+        <button onclick="iftaDeleteModal.close()"
+                class="cursor-pointer rounded bg-slate-300 h-[7dvh] min-w-[10dvw] text-center hover:bg-slate-400 transition text-slate-800 px-4 py-2 border-0">Close</button>
+      </div>
+    </div>
+  </dialog>
+  {% block javascript %}
+    <script>
+      const iftaDeleteModal = document.getElementById("ifta-delete-modal");
+    </script>
+  {% endblock javascript %}
+{% endpartialdef %}

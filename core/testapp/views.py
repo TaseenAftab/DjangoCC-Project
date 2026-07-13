@@ -87,7 +87,11 @@ class IftaUpdateView(
 ifta_update_view = IftaUpdateView.as_view()
 
 
-class IftaDeleteView(LoginRequiredMixin, DeleteView):
+class IftaDeleteView(
+    LoginRequiredMixin,
+    HTMXFormMixin,
+    DeleteView,
+):
     model = Ifta
     success_url = reverse_lazy("testapp:ifta_list")
     slug_field = "name"
@@ -97,6 +101,9 @@ class IftaDeleteView(LoginRequiredMixin, DeleteView):
         context = super().get_context_data(*args, **kwargs)
         context["title"] = "Delete Ifta"
         return context
+
+    def get_success_url(self):
+        return reverse_lazy("testapp:ifta_list")
 
 
 ifta_delete_view = IftaDeleteView.as_view()

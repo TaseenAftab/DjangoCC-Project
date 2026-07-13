@@ -2,27 +2,40 @@
 {% load widget_tweaks %}
 
 {% partialdef detail %}
-  <div class="w-full flex-col flex my-1 bg-white border border-gray-200 rounded-lg shadow sm:p-3 md:p-4">
-    <div class="flex-row flex w-fit gap-x-4 mb-0 justify-center items-center ">
-      <div>{{ object.name.capitalize }} : {{ object.get_fiqh_display }}</div>
-      <button hx-get="{% url 'testapp:ifta_update' object.name %}"
-              hx-target="#update-form"
-              hx-swap="innerHTML"
-              class="cursor-pointer rounded bg-blue-400 text-white p-2 border-0">Update Ifta</button>
-      <form method="post"
-            action="{% url 'testapp:ifta_delete' object.name %}"
-            class="inline">
-        {% csrf_token %}
-        <button type="submit"
+  <div id="ifta-detail-card"
+       class="w-full flex-col flex my-1 bg-white border border-gray-200 rounded-lg shadow sm:p-3 md:p-4">
+    <div class="flex-row flex w-full justify-between items-center mb-0">
+      <div class="flex-row flex gap-x-4 items-center">
+        <div>{{ object.name.capitalize }} : {{ object.get_fiqh_display }}</div>
+        <button hx-get="{% url 'testapp:ifta_update' object.name %}"
+                hx-target="#update-form"
+                hx-swap="innerHTML"
+                class="cursor-pointer rounded bg-blue-400 text-white p-2 border-0">Update Ifta</button>
+        <button onclick="iftaDeleteModal.showModal()"
                 class="cursor-pointer rounded bg-red-400 text-white p-2 border-0">Delete Ifta</button>
-      </form>
+        <form method="post"
+              action="{% url 'testapp:ifta_delete' object.name %}"
+              class="inline">
+          {% csrf_token %}
+        </form>
+      </div>
+      <div id="close-btn-placeholder" class="flex items-center"></div>
     </div>
     <div id="update-form" class="flex flex-col"></div>
   </div>
+  {% include './modals.html#delete_modal' %}
 {% endpartialdef %}
 {% partialdef update %}
   <div class="w-full flex flex-col rounded-lg py-2 px-4 mt-3 justify-start bg-slate-100">
     <h5 class="my-[1dvh]">Update Ifta</h5>
     {% include './form.html#update_form' with form=form %}
+  </div>
+  <div id="close-btn-placeholder"
+       hx-swap-oob="true"
+       class="flex items-center">
+    <button hx-get="{% url 'testapp:ifta_detail' object.name %}"
+            hx-target="#ifta-detail-card"
+            hx-swap="outerHTML"
+            class="text-gray-400 hover:text-gray-600 focus:outline-none text-2xl font-bold cursor-pointer">×</button>
   </div>
 {% endpartialdef %}
