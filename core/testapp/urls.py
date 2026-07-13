@@ -1,11 +1,13 @@
 from django.urls import path
 
-from core.testapp.views import ifta_create_view
-from core.testapp.views import ifta_delete_view
-from core.testapp.views import ifta_detail_view
-from core.testapp.views import ifta_list_view
-from core.testapp.views import ifta_update_view
-from core.testapp.views import testview
+from core.testapp.views import (
+    ifta_create_view,
+    ifta_delete_view,
+    ifta_detail_view,
+    ifta_list_view,
+    ifta_update_view,
+    testview,
+)
 
 app_name = "testapp"
 
