@@ -49,8 +49,8 @@
   </head>
   <body class="{% block bodyclass %}{% endblock bodyclass %}">
     {% block body %}
-      <div class="mb-1">
-        <nav class="navbar navbar-expand-md navbar-light bg-light">
+      <div class="">
+        <nav class="navbar navbar-expand-md navbar-light bg-light h-[10dvh]">
           <div class="container-fluid">
             <button class="navbar-toggler navbar-toggler-right"
                     type="button"
@@ -71,9 +71,6 @@
                   <a class="nav-link" href="{% url 'about' %}">About</a>
                 </li>
                 {% if request.user.is_authenticated %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'testapp:dashboard' %}">{% translate "Dashboard" %}</a>
-                  </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'testapp:ifta_list' %}">{% translate "Iftas" %}</a>
                   </li>

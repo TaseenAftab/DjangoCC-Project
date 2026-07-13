@@ -1,34 +1,33 @@
 {% extends '../base.html' %}
 
 {% load widget_tweaks %}
+{% load partials %}
 
 {% block title %}{{ title }}{% endblock title %}
 {% block content %}
-  <ul id="ifta-list" class="list-disc pl-5">
-    {% for ifta in object_list %}
-      <li>
-        <a href="{% url 'testapp:ifta_detail' ifta.name %}"
-           class="text-blue-600 hover:underline">{{ ifta.name.capitalize }}</a>
-        : {{ ifta.get_fiqh_display }}
-      </li>
-    {% endfor %}
-  </ul>
-  <h2 class="text-lg font-semibold mt-4">Add new Ifta</h2>
-  <form action="{% url 'testapp:ifta_create' %}"
-        class="flex-row flex flex-1 gap-x-4 justify-left mt-2"
-        method="post">
-    {% csrf_token %}
-    <div class="mb-3">
-      {{ form.name.label_tag }}
-      {% render_field form.name class+="text-lg bg-slate-200 border-0 px-2 py-1 rounded" %}
-      {{ form.name.errors }}
+  <div id="list-container"
+       class="w-[90dvw] bg-slate-100 min-h-[90dvh] flex flex-row gap-2 justify-center align-top">
+    <div class=" w-[40dvw] mt-4 ">
+      <h5 class="ml-[2%] mb-3">All Iftas</h5>
+      <div id="ifta-list" class="flex flex-col gap-2">
+        {% for ifta in object_list %}
+          <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow transition">
+            <span hx-get="{% url 'testapp:ifta_detail' ifta.name %}"
+                  hx-target="#list-container"
+                  hx-swap="outerHTML"
+                  class="font-semibold text-slate-800 hover:cursor-pointer hover:text-blue-600 transition no-underline">
+              {{ ifta.name.capitalize }}
+            </span>
+            <span class="bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded-full font-medium border border-blue-100">
+              {{ ifta.get_fiqh_display }}
+            </span>
+          </div>
+        {% endfor %}
+      </div>
     </div>
-    <div class="mb-3">
-      {{ form.fiqh.label_tag }}
-      {% render_field form.fiqh class+="text-lg bg-slate-200 border-0 px-2 py-1 rounded" %}
-      {{ form.fiqh.errors }}
+    <div class=" w-[40dvw] border border-black px-[1rem] flex flex-col ">
+      <h2 class="text-lg font-semibold mt-4">Add new Ifta</h2>
+      {% include './partials/form.html#create_form' with form=form %}
     </div>
-    <button type="submit"
-            class="rounded-full bg-slate-300 mb-3 h-fit cursor-pointer px-4 py-2 self-center border-black border-2 hover:bg-slate-400 transition">Create</button>
-  </form>
+  </div>
 {% endblock content %}
