@@ -9,8 +9,13 @@
               hx-target="#update-form"
               hx-swap="innerHTML"
               class="cursor-pointer rounded bg-blue-400 text-white p-2 border-0">Update Ifta</button>
-      <button hx-post="{% url 'testapp:ifta_delete' object.name %}"
-              class="cursor-pointer rounded bg-red-400 text-white p-2 border-0">Delete Ifta</button>
+      <form method="post"
+            action="{% url 'testapp:ifta_delete' object.name %}"
+            class="inline">
+        {% csrf_token %}
+        <button type="submit"
+                class="cursor-pointer rounded bg-red-400 text-white p-2 border-0">Delete Ifta</button>
+      </form>
     </div>
     <div id="update-form" class="flex flex-col"></div>
   </div>
