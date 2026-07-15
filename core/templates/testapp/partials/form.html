@@ -32,12 +32,12 @@
       {% csrf_token %}
       <div class="mb-3">
         {{ form.name.label_tag }}
-        {% render_field form.name class+="text-sm mt-2 bg-slate-200 border-0 p-2 h-[8dvh] w-full rounded placeholder:text-sm" placeholder='Name' %}
+        {% render_field form.name class+="text-sm mt-2 bg-slate-200 border-0 p-2 h-[8dvh] w-full rounded placeholder:text-sm" id="update-form-name" placeholder='Name' autocomplete="false" %}
         {{ form.name.errors }}
       </div>
       <div class="mb-3">
         {{ form.fiqh.label_tag }}
-        {% render_field form.fiqh class+=" bg-slate-200 border-0 p-2 mt-2 h-[8dvh] w-full rounded text-sm" %}
+        {% render_field form.fiqh class+=" bg-slate-200 border-0 p-2 mt-2 h-[8dvh] w-full rounded text-sm" id="update-form-fiqh" %}
         {{ form.fiqh.errors }}
       </div>
       <span id="update-ifta-error" class="text-sm text-red-500"></span>
@@ -49,4 +49,54 @@
       </button>
     </div>
   </form>
+  <script>
+    (function() {
+      const nameInput = document.getElementById("update-form-name");
+      const fiqhSelect = document.getElementById("update-form-fiqh");
+      const errorSpan = document.getElementById("update-ifta-error");
+      const form = nameInput.closest("form");
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      const validFiqhs = ["hanafi", "maliki", "shafi", "hanbali"];
+
+      function validate() {
+        const name = nameInput.value.trim();
+        const fiqh = fiqhSelect.value;
+
+        let errors = [];
+
+        if (name.length < 6) {
+          errors.push("Name must be 6 characters or longer.");
+        }
+
+        if (!validFiqhs.includes(fiqh)) {
+          errors.push("Please select a valid Fiqh choice.");
+        }
+
+        if (errors.length > 0) {
+          errorSpan.textContent = errors.join(" ");
+          submitBtn.disabled = true;
+          submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+          submitBtn.classList.remove("cursor-pointer", "hover:bg-slate-400");
+        } else {
+          errorSpan.textContent = "";
+          submitBtn.disabled = false;
+          submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+          submitBtn.classList.add("cursor-pointer", "hover:bg-slate-400");
+        }
+      }
+      let debounceTimeout;
+
+      function debouncedValidate() {
+        errorSpan.textContent = "";
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(validate, 1000);
+      }
+
+      nameInput.addEventListener("input", debouncedValidate);
+      fiqhSelect.addEventListener("change", debouncedValidate);
+
+      validate();
+    })();
+  </script>
 {% endpartialdef %}

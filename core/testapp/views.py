@@ -29,7 +29,10 @@ class IftaListView(LoginRequiredMixin, ListView):
 ifta_list_view = IftaListView.as_view()
 
 
-class IftaDetailView(LoginRequiredMixin, DetailView):
+class IftaDetailView(
+    LoginRequiredMixin,
+    DetailView,
+):
     model = Ifta
     template_name = "testapp/partials/crud_partials.html#detail"
     slug_field = "name"
@@ -40,11 +43,20 @@ class IftaDetailView(LoginRequiredMixin, DetailView):
         context["title"] = f"{self.object.name}"
         return context
 
+    def get(self, request, *args, **kwargs):
+        if not request.headers.get("HX-Request"):
+            return redirect("testapp:ifta_list")
+        return super().get(request, *args, **kwargs)
+
 
 ifta_detail_view = IftaDetailView.as_view()
 
 
-class IftaCreateView(HTMXFormMixin, LoginRequiredMixin, CreateView):
+class IftaCreateView(
+    HTMXFormMixin,
+    LoginRequiredMixin,
+    CreateView,
+):
     model = Ifta
     form_class = CreateIFtaForm
     success_url = reverse_lazy("testapp:ifta_list")

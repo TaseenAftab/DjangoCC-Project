@@ -12,15 +12,24 @@
       <div class="flex justify-between align-bottom items-end w-full h-full flex-row mt-2 gap-x-4">
         <span hx-post="{% url 'testapp:ifta_delete' object.name %}"
               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-              class="cursor-pointer h-[7dvh] min-w-[10dvw] text-center rounded bg-red-400 text-white p-2 border-0">Delete Ifta</span>
-        <button onclick="iftaDeleteModal.close()"
+              class="cursor-pointer h-[7dvh] min-w-[10dvw] text-center rounded bg-red-400 hover:bg-red-500 transition text-white p-2 border-0">Delete Ifta</span>
+        <button hx-on:click="this.closest('dialog').close()"
                 class="cursor-pointer rounded bg-slate-300 h-[7dvh] min-w-[10dvw] text-center hover:bg-slate-400 transition text-slate-800 px-4 py-2 border-0">Close</button>
       </div>
     </div>
   </dialog>
-  {% block javascript %}
-    <script>
-      const iftaDeleteModal = document.getElementById("ifta-delete-modal");
-    </script>
-  {% endblock javascript %}
+  <script>
+    const dialog = document.getElementById("ifta-delete-modal");
+    dialog.addEventListener("click", e => {
+      const dialogDimensions = dialog.getBoundingClientRect()
+      if (
+        e.clientX < dialogDimensions.left ||
+        e.clientX > dialogDimensions.right ||
+        e.clientY < dialogDimensions.top ||
+        e.clientY > dialogDimensions.bottom
+      ) {
+        dialog.close()
+      }
+    })
+  </script>
 {% endpartialdef %}

@@ -15,6 +15,7 @@
             <span hx-get="{% url 'testapp:ifta_detail' ifta.name %}"
                   hx-target="#list-container"
                   hx-swap="outerHTML"
+                  hx-push-url="true"
                   class="font-semibold text-slate-800 hover:cursor-pointer hover:text-blue-600 transition no-underline">
               {{ ifta.name.capitalize }}
             </span>

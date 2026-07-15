@@ -7,12 +7,13 @@
     <div class="flex-row flex w-full justify-between items-center mb-0">
       <div class="flex-row flex gap-x-4 items-center">
         <div>{{ object.name.capitalize }} : {{ object.get_fiqh_display }}</div>
-        <button hx-get="{% url 'testapp:ifta_update' object.name %}"
+        <button id="update-ifta-btn"
+                hx-get="{% url 'testapp:ifta_update' object.name %}"
                 hx-target="#update-form"
                 hx-swap="innerHTML"
-                class="cursor-pointer rounded bg-blue-400 text-white p-2 border-0">Update Ifta</button>
-        <button onclick="iftaDeleteModal.showModal()"
-                class="cursor-pointer rounded bg-red-400 text-white p-2 border-0">Delete Ifta</button>
+                class="cursor-pointer rounded bg-blue-400 hover:bg-blue-500 text-white p-2 border-0">Update Ifta</button>
+        <button hx-on:click="document.getElementById('ifta-delete-modal').showModal()"
+                class="cursor-pointer rounded bg-red-400 hover:bg-red-500 text-white p-2 border-0">Delete Ifta</button>
         <form method="post"
               action="{% url 'testapp:ifta_delete' object.name %}"
               class="inline">
@@ -38,4 +39,10 @@
             hx-swap="outerHTML"
             class="text-gray-400 hover:text-gray-600 focus:outline-none text-2xl font-bold cursor-pointer">×</button>
   </div>
-{% endpartialdef %}
+  <button id="update-ifta-btn"
+          hx-get="{% url 'testapp:ifta_detail' object.name %}"
+          hx-target="#ifta-detail-card"
+          hx-swap="outerHTML"
+          hx-swap-oob="true"
+          class="cursor-pointer rounded bg-blue-400 hover:bg-blue-500 text-white p-2 border-0">Update Ifta</button>
+{% endpartialdef update %}
